@@ -1,0 +1,36 @@
+📁 Mimard
+├── 🌐 index.html (principal)
+├── 📁 Icon
+│   ├── 🖼️ MimardGG_icon.png
+│   └── 🖼️ MimardGG_icon-no-background.png
+└── 📁 Jeux
+    ├── 📁 Minecraft
+    │   ├── 🌐 minecraft.html
+    │   └── 🖼️ minecraft-logo.png
+    ├── 📁 Angry Birds
+    │   ├── 🌐 angry-birds.html
+    │   └── 🖼️ angry-birds-logo.png
+    ├── 📁 Angry Birds 2
+    │   ├── 🌐 angry-birds-2.html
+    │   └── 🖼️ angry-birds-2-logo.png
+    ├── 📁 Pokémon Saphire
+    │   ├── 🌐 pokemonsaphire.html
+    │   └── 🖼️ pokemon-saphire-logo.png
+    ├── 📁 Geometry Dash
+    │   ├── 🌐 geometry-dash.html
+    │   └── 🖼️ Geometry-dash-logo.png
+    ├── 📁 Among Us
+    │   ├── 🌐 among-us.html
+    │   └── 🖼️ among-us-logo.png
+    ├── 📁 Backrooms
+    │   ├── 🌐 backrooms.html
+    │   └── 🖼️ backrooms-logo.png
+    ├── 📁 GTA III
+    │   ├── 🌐 gta3.html
+    │   └── 🖼️ gta-3-logo.png
+    ├── 📁 Mari0
+    │   ├── 🌐 mari0.html
+    │   └── 🖼️ mari0-logo.png
+    └── 📁 Subway-Surfers
+        ├── 🌐 subway-surfers.html
+        └── 🖼️ subway-surfers-logo.png

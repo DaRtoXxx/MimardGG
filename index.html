@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="description" content="MimardGG — une sélection de jeux jouables dans le navigateur, sans installation.">
+  <link rel="icon" type="image/png" href="./Icon/MimardGG_icon.png">
+  <link rel="apple-touch-icon" href="./Icon/MimardGG_icon.png">
+  <title>MimardGG — Jeux sur navigateur</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0b0d;
+      --surface: #121214;
+      --surface-raised: #18181b;
+      --line: #29292d;
+      --text: #f2f0ef;
+      --muted: #a49c9d;
+      --quiet: #777173;
+      --red: #a82031;
+      --red-bright: #c52d40;
+      --red-deep: #45161d;
+      --max: 1220px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 82px; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    .wrap { width: min(var(--max), calc(100% - 56px)); margin-inline: auto; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .site-header { position: sticky; top: 0; z-index: 20; background: rgba(11,11,13,.96); border-bottom: 1px solid var(--line); }
+    .header-inner { min-height: 72px; display: flex; align-items: center; gap: 34px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; flex: 0 0 auto; }
+    .brand-mark { width: 34px; height: 34px; display: block; object-fit: contain; border-radius: 5px; }
+    .brand-copy { display: flex; flex-direction: column; gap: 2px; }
+    .brand-copy strong { font-size: 14px; letter-spacing: .16em; font-weight: 850; }
+    .brand-copy small { color: var(--quiet); font-size: 8px; letter-spacing: .22em; }
+    .main-nav { display: flex; align-items: center; gap: 27px; margin-left: auto; }
+    .main-nav a { color: #b8b2b3; font-size: 11px; letter-spacing: .04em; transition: color .16s; }
+    .main-nav a:hover { color: white; }
+    .header-status { display: inline-flex; align-items: center; gap: 9px; padding-left: 22px; border-left: 1px solid var(--line); color: #aaa3a4; font-size: 10px; white-space: nowrap; }
+    .status-line { width: 7px; height: 7px; background: var(--red-bright); border-radius: 50%; }
+    .hero { border-bottom: 1px solid var(--line); background: #0f0f11; }
+    .hero-inner { min-height: 490px; display: grid; grid-template-columns: .93fr 1.07fr; align-items: center; gap: 54px; padding-block: 56px; }
+    .hero-copy { padding: 8px 0 12px; }
+    .overline { display: inline-flex; align-items: center; gap: 10px; color: #d5c7c8; font-size: 9px; font-weight: 750; letter-spacing: .2em; text-transform: uppercase; }
+    .overline::before { content: ""; width: 22px; height: 2px; background: var(--red-bright); }
+    h1 { max-width: 570px; margin: 22px 0 0; font-size: clamp(46px, 6vw, 76px); font-weight: 760; letter-spacing: -.072em; line-height: .96; }
+    h1 span { color: #cf3a49; }
+    .hero-copy > p { max-width: 455px; margin: 22px 0 0; color: #aaa2a4; font-size: 14px; line-height: 1.8; }
+    .hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; margin-top: 29px; }
+    .button-primary { min-height: 44px; display: inline-flex; align-items: center; gap: 14px; padding: 0 16px; border: 1px solid var(--red); border-radius: 5px; background: var(--red); color: white; font-size: 11px; font-weight: 760; transition: background .16s, border-color .16s; }
+    .button-primary:hover { background: var(--red-bright); border-color: var(--red-bright); }
+    .button-primary svg { width: 14px; height: 14px; }
+    .hero-count { display: flex; align-items: baseline; gap: 7px; color: var(--muted); font-size: 10px; }
+    .hero-count strong { color: white; font-size: 17px; font-weight: 780; letter-spacing: -.04em; }
+    .hero-feature { position: relative; min-height: 355px; align-self: stretch; overflow: hidden; border: 1px solid #343033; border-radius: 7px; background: #171416; }
+    .hero-feature img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .hero-feature::after { position: absolute; inset: 0; content: ""; background: linear-gradient(180deg, rgba(7,7,9,.08) 18%, rgba(7,7,9,.1) 42%, rgba(7,7,9,.88) 100%); pointer-events: none; }
+    .feature-top { position: absolute; z-index: 1; top: 17px; left: 17px; display: flex; align-items: center; gap: 9px; }
+    .feature-tag { padding: 7px 9px; border: 1px solid rgba(255,255,255,.22); border-radius: 3px; background: rgba(12,11,12,.74); color: #eee9e9; font-size: 8px; font-weight: 760; letter-spacing: .15em; text-transform: uppercase; }
+    .feature-copy { position: absolute; z-index: 1; right: 22px; bottom: 20px; left: 22px; display: flex; justify-content: space-between; align-items: end; gap: 18px; }
+    .feature-copy small { color: #e3a0a5; font-size: 9px; font-weight: 700; letter-spacing: .17em; text-transform: uppercase; }
+    .feature-copy strong { display: block; margin: 7px 0 3px; font-size: 25px; font-weight: 730; letter-spacing: -.045em; }
+    .feature-description { display: block; color: #c5bdbf; font-size: 10px; }
+    .feature-play { min-height: 39px; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 12px; padding: 0 13px; border: 1px solid rgba(255,255,255,.3); border-radius: 4px; background: rgba(13,12,13,.72); color: white; font-size: 10px; font-weight: 740; transition: background .16s, border-color .16s; }
+    .feature-play:hover { background: var(--red); border-color: var(--red); }
+    .feature-play span { color: #ed747e; font-size: 14px; }
+    .feature-play:hover span { color: white; }
+    .hero-foot { display: flex; align-items: center; gap: 28px; padding: 17px 0 19px; color: #8e8789; font-size: 9px; letter-spacing: .05em; }
+    .hero-foot span { display: inline-flex; align-items: center; gap: 8px; }
+    .hero-foot span + span { padding-left: 27px; border-left: 1px solid var(--line); }
+    .hero-foot b { color: #d1cbcc; font-weight: 600; }
+    .catalogue { padding: 70px 0 80px; }
+    .catalogue-head { display: flex; justify-content: space-between; align-items: end; gap: 25px; margin-bottom: 25px; }
+    .section-label { margin: 0 0 10px; color: #d1626b; font-size: 9px; font-weight: 750; letter-spacing: .2em; text-transform: uppercase; }
+    h2.section-title { margin: 0; font-size: clamp(29px, 3.5vw, 42px); font-weight: 730; letter-spacing: -.065em; line-height: 1.05; }
+    h2.section-title span { color: #c93948; }
+    .section-intro { margin: 10px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .catalogue-tools { display: flex; gap: 9px; width: min(460px, 100%); }
+    .search-wrap { position: relative; flex: 1 1 auto; }
+    .search-wrap svg { position: absolute; top: 50%; left: 12px; width: 15px; height: 15px; color: #827b7d; transform: translateY(-50%); pointer-events: none; }
+    .search-wrap input, .category-select { height: 40px; border: 1px solid #343034; border-radius: 4px; outline: none; background: #121214; color: #ede9e9; font-size: 10px; }
+    .search-wrap input { width: 100%; padding: 0 12px 0 35px; }
+    .search-wrap input::placeholder { color: #777173; }
+    .search-wrap input:focus, .category-select:focus { border-color: #9f303d; }
+    .category-select { min-width: 130px; padding: 0 28px 0 11px; }
+    .result-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; color: #7c7577; font-size: 9px; }
+    .result-row strong { color: #c9c2c3; font-weight: 650; }
+    .game-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .game-card { min-width: 0; overflow: hidden; border: 1px solid #2b292b; border-radius: 6px; background: var(--surface); transition: border-color .16s, transform .16s; }
+    .game-card:hover { border-color: #79404a; transform: translateY(-2px); }
+    .card-image { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; background: #201b1d; }
+    .card-image img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .22s ease; }
+    .game-card:hover .card-image img { transform: scale(1.025); }
+    .card-image::after { position: absolute; inset: 45% 0 0; content: ""; background: linear-gradient(180deg, transparent, rgba(5,5,6,.55)); pointer-events: none; }
+    .card-number { position: absolute; z-index: 1; top: 10px; left: 10px; padding: 5px 7px; border: 1px solid rgba(255,255,255,.19); border-radius: 3px; background: rgba(9,8,9,.7); color: #e5dfdf; font-size: 8px; font-weight: 650; letter-spacing: .08em; }
+    .card-category { position: absolute; z-index: 1; right: 10px; bottom: 9px; color: #e7dfe0; font-size: 8px; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; }
+    .card-placeholder { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; flex-direction: column; gap: 8px; background: #151114; color: #e0dbdc; }
+    .placeholder-mark { width: 55px; height: 55px; display: grid; place-items: center; border: 1px solid #6d2933; border-radius: 50%; color: #c74754; font-size: 18px; font-weight: 780; letter-spacing: -.04em; }
+    .card-placeholder small { color: #8c8082; font-size: 8px; letter-spacing: .19em; }
+    .card-body { padding: 13px 13px 12px; }
+    .card-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+    .card-edition { overflow: hidden; color: #867f81; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+    .soon-label { flex: 0 0 auto; color: #c78187; font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .card-title { margin: 0; overflow: hidden; color: #f1eeee; font-size: 14px; font-weight: 710; letter-spacing: -.025em; text-overflow: ellipsis; white-space: nowrap; }
+    .card-desc { min-height: 32px; margin: 6px 0 12px; color: #9b9496; font-size: 9px; line-height: 1.55; }
+    .play-button, .soon-button { width: 100%; min-height: 34px; display: flex; align-items: center; justify-content: center; gap: 9px; border: 1px solid #3b2a2d; border-radius: 4px; background: #1a1214; color: #eadcde; font-size: 9px; font-weight: 720; transition: background .16s, border-color .16s, color .16s; }
+    .play-button:hover { border-color: var(--red); background: var(--red); color: white; }
+    .play-button span { color: #d46872; font-size: 12px; }
+    .play-button:hover span { color: white; }
+    .soon-button { border-color: #2b2729; background: #151416; color: #716a6c; cursor: not-allowed; }
+    .empty-state { grid-column: 1 / -1; padding: 42px 15px; border: 1px dashed #343034; border-radius: 6px; color: #a49c9d; text-align: center; font-size: 11px; }
+    .about-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: center; margin: 0 auto 72px; padding: 25px 27px; border: 1px solid #2c282a; border-left: 3px solid var(--red); border-radius: 4px; background: #111012; }
+    .about-strip h2 { margin: 0 0 8px; font-size: 18px; font-weight: 700; letter-spacing: -.04em; }
+    .about-strip p { max-width: 520px; margin: 0; color: #a49c9d; font-size: 10px; line-height: 1.7; }
+    .about-points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .about-point { padding-left: 10px; border-left: 1px solid #4e292f; }
+    .about-point strong { display: block; margin-bottom: 4px; color: #e9e2e3; font-size: 10px; }
+    .about-point span { color: #877f81; font-size: 8px; line-height: 1.5; }
+    .site-footer { border-top: 1px solid var(--line); padding: 19px 0 24px; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 18px; color: #716b6d; font-size: 9px; }
+    .footer-brand { color: #c7c1c2; font-size: 10px; font-weight: 800; letter-spacing: .13em; }
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a:hover { color: #eee; }
+    :focus-visible { outline: 2px solid #df6a75; outline-offset: 3px; }
+    @media (max-width: 1050px) {
+      .game-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .hero-inner { gap: 33px; }
+    }
+    @media (max-width: 760px) {
+      .wrap { width: calc(100% - 36px); }
+      .header-inner { min-height: 64px; gap: 16px; }
+      .main-nav { gap: 15px; }
+      .header-status { display: none; }
+      .hero-inner { grid-template-columns: 1fr; gap: 27px; padding-block: 40px 27px; }
+      .hero-copy { padding: 0; }
+      .hero-feature { min-height: 310px; }
+      .hero-foot { flex-wrap: wrap; gap: 12px 22px; }
+      .hero-foot span + span { padding-left: 0; border-left: 0; }
+      .catalogue { padding-top: 51px; }
+      .catalogue-head { align-items: flex-start; flex-direction: column; gap: 17px; }
+      .catalogue-tools { width: 100%; }
+      .about-strip { grid-template-columns: 1fr; gap: 20px; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 28px); }
+      .main-nav a:nth-child(2) { display: none; }
+      .brand-copy strong { font-size: 12px; }
+      .hero-inner { padding-top: 34px; }
+      h1 { font-size: clamp(43px, 12vw, 58px); }
+      .hero-copy > p { font-size: 12px; }
+      .hero-feature { min-height: 260px; }
+      .feature-copy { right: 13px; bottom: 13px; left: 13px; }
+      .feature-copy strong { font-size: 20px; }
+      .feature-play { min-height: 35px; padding-inline: 10px; }
+      .hero-foot { font-size: 8px; }
+      .catalogue-tools { flex-direction: column; }
+      .category-select { width: 100%; }
+      .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+      .card-body { padding: 10px 9px 9px; }
+      .card-title { font-size: 12px; }
+      .card-desc { min-height: 43px; font-size: 8px; }
+      .card-edition, .soon-label { font-size: 7px; }
+      .play-button, .soon-button { min-height: 32px; font-size: 8px; }
+      .about-strip { margin-bottom: 47px; padding: 19px; }
+      .about-points { grid-template-columns: 1fr; gap: 10px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top" aria-label="MimardGG, accueil">
+        <img class="brand-mark" src="./Icon/MimardGG_icon-no-background.png" alt="">
+        <span class="brand-copy"><strong>MimardGG</strong><small>JEUX SUR NAVIGATEUR</small></span>
+      </a>
+      <nav class="main-nav" aria-label="Navigation principale">
+        <a href="#catalogue">Catalogue</a>
+        <a href="#apropos">À propos</a>
+      </nav>
+      <div class="header-status"><span class="status-line" aria-hidden="true"></span><span id="headerCount">9 jeux disponibles</span></div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <div class="overline">JEUX SUR NAVIGATEUR · ARCADE EN LIGNE</div>
+          <h1 id="hero-title">Le jeu,<br><span>sans détour.</span></h1>
+          <p>Une sélection de jeux à lancer dans ton navigateur. Choisis une carte, ouvre la partie et joue — sans installation séparée.</p>
+          <div class="hero-actions">
+            <a class="button-primary" href="#catalogue">Voir le catalogue <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <span class="hero-count"><strong>10</strong> jeux prêts</span>
+          </div>
+        </div>
+        <a class="hero-feature" href="./Jeux/Minecraft/minecraft.html" aria-label="Jouer à Minecraft">
+          <img src="./Jeux/Minecraft/minecraft-logo.png" alt="" fetchpriority="high">
+          <span class="feature-top"><span class="feature-tag">À la une</span><span class="feature-tag">Sandbox</span></span>
+          <span class="feature-copy">
+            <span class="feature-text"><small>JEU SÉLECTIONNÉ</small><strong>Minecraft</strong><span class="feature-description">Explore, construis et survis dans un monde de blocs.</span></span>
+            <span class="feature-play">Jouer <span aria-hidden="true">↗</span></span>
+          </span>
+        </a>
+      </div>
+      <div class="wrap hero-foot" aria-label="Informations du portail">
+        <span><b>01</b> Sélection courte</span>
+        <span><b>02</b> Lancement direct</span>
+        <span><b>03</b> Compatible navigateur</span>
+      </div>
+    </section>
+
+    <section class="catalogue" id="catalogue" aria-labelledby="catalogue-title">
+      <div class="wrap">
+        <div class="catalogue-head">
+          <div>
+            <p class="section-label">LA COLLECTION</p>
+            <h2 class="section-title" id="catalogue-title">Choisis ton <span>prochain jeu.</span></h2>
+            <p class="section-intro">Des univers différents, une seule destination.</p>
+          </div>
+          <div class="catalogue-tools">
+            <label class="search-wrap">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              <input id="searchInput" type="search" placeholder="Rechercher un jeu" autocomplete="off" aria-label="Rechercher un jeu">
+            </label>
+            <label class="sr-only" for="categorySelect">Filtrer par catégorie</label>
+            <select class="category-select" id="categorySelect" aria-label="Filtrer par catégorie">
+              <option value="all">Toutes catégories</option>
+              <option value="action">Action</option>
+              <option value="aventure">Aventure</option>
+              <option value="arcade">Arcade</option>
+              <option value="course">Course</option>
+              <option value="horreur">Horreur</option>
+              <option value="rpg">RPG</option>
+            </select>
+          </div>
+        </div>
+        <div class="result-row"><span id="resultCount" aria-live="polite"></span><span>Les jeux ouvrent leur page dédiée.</span></div>
+        <div class="game-grid" id="gameGrid"></div>
+      </div>
+    </section>
+
+    <section class="wrap about-strip" id="apropos" aria-labelledby="about-title">
+      <div>
+        <p class="section-label">À PROPOS</p>
+        <h2 id="about-title">Du jeu, tout simplement.</h2>
+        <p>MimardGG rassemble tes pages de jeu dans un catalogue clair. Chaque partie s’ouvre depuis son propre dossier et se joue dans le navigateur.</p>
+      </div>
+      <div class="about-points">
+        <div class="about-point"><strong>Sans installation</strong><span>Les pages se lancent directement dans le navigateur.</span></div>
+        <div class="about-point"><strong>Une sélection maison</strong><span>Des jeux et des univers variés au même endroit.</span></div>
+        <div class="about-point"><strong>À garder en tête</strong><span>Certains jeux chargent leurs fichiers depuis Internet.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <a class="footer-brand" href="#top">MimardGG</a>
+      <span>Portail de jeux sur navigateur · Projet personnel</span>
+      <div class="footer-links"><a href="#catalogue">Catalogue</a><a href="#apropos">À propos</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const games = [
+      { id: 'minecraft', title: 'Minecraft', edition: 'Eaglercraft 1.12 · WASM-GC', category: 'aventure', categoryLabel: 'Aventure', tag: 'SANDBOX', image: './Jeux/Minecraft/minecraft-logo.png', path: './Jeux/Minecraft/minecraft.html', description: 'Explore, construis et survis dans un monde de blocs.' },
+      { id: 'angry-birds', title: 'Angry Birds', edition: 'Build Unity', category: 'arcade', categoryLabel: 'Arcade', tag: 'PUZZLE', image: './Jeux/Angry%20Birds/angry-birds-logo.png', path: './Jeux/Angry%20Birds/angry-birds.html', description: 'Vise les structures et aide les oiseaux à récupérer leurs œufs.' },
+      { id: 'angry-birds-2', title: 'Angry Birds 2', edition: 'Build Unity', category: 'arcade', categoryLabel: 'Arcade', tag: 'PUZZLE', image: './Jeux/Angry%20Birds%202/angry-birds-2-logo.png', path: './Jeux/Angry%20Birds%202/angry-birds-2.html', description: 'Choisis tes oiseaux et détruis les forteresses des cochons.' },
+      { id: 'pokemon-saphire', title: 'Pokémon Saphire', edition: 'Émulateur Game Boy Advance', category: 'rpg', categoryLabel: 'RPG', tag: 'AVENTURE', image: './Jeux/Pok%C3%A9mon%20Saphire/pokemon-saphire-logo.png', path: './Jeux/Pok%C3%A9mon%20Saphire/pokemonsaphire.html', description: 'Parcours Hoenn et découvre les Pokémon de la région.' },
+      { id: 'geometry-dash', title: 'Geometry Dash', edition: 'Build WebGL', category: 'arcade', categoryLabel: 'Arcade', tag: 'RYTHME', image: './Jeux/Geometry%20Dash/Geometry-dash-logo.png', path: './Jeux/Geometry%20Dash/geometry-dash.html', description: 'Saute et évite les obstacles en suivant le rythme des niveaux.' },
+      { id: 'among-us', title: 'Among Us', edition: 'Build navigateur', category: 'action', categoryLabel: 'Action', tag: 'MULTIJOUEUR', image: './Jeux/Among%20Us/among-us-logo.png', path: './Jeux/Among%20Us/among-us.html', description: 'Accomplis les tâches à bord du vaisseau et découvre qui sabote l’équipage.' },
+      { id: 'backrooms', title: 'The Backrooms', edition: 'Build WebGL', category: 'horreur', categoryLabel: 'Horreur', tag: 'EXPLORATION', image: './Jeux/Backrooms/backrooms-logo.png', path: './Jeux/Backrooms/backrooms.html', description: 'Explore un dédale de couloirs et cherche la sortie.' },
+      { id: 'gta-3', title: 'GTA III', edition: 'Portage Web', category: 'action', categoryLabel: 'Action', tag: 'MONDE OUVERT', image: './Jeux/GTA%20III/gta-3-logo.png', path: './Jeux/GTA%20III/gta3.html', description: 'Parcours Liberty City dans ce jeu d’action en monde ouvert.' },
+      { id: 'mari0', title: 'Mari0', edition: 'Portage Web · LÖVE', category: 'arcade', categoryLabel: 'Arcade', tag: 'PLATEFORME', image: './Jeux/Mari0/mari0-logo.png', path: './Jeux/Mari0/mari0.html', description: 'Un jeu de plateforme et de réflexion avec un portail à portée de main.' },
+      { id: 'subway-surfers', title: 'Subway Surfers', edition: 'Build WebGL', category: 'course', categoryLabel: 'Course', tag: 'RUNNER', image: './Jeux/Subway-Surfers/subway-surfers-logo.png', path: './Jeux/Subway-Surfers/subway-surfers.html', description: 'Cours, évite les obstacles et essaie de battre ton meilleur score.' }
+    ];
+
+    const grid = document.getElementById('gameGrid');
+    const searchInput = document.getElementById('searchInput');
+    const categorySelect = document.getElementById('categorySelect');
+    const resultCount = document.getElementById('resultCount');
+    const playableCount = games.filter(game => !game.comingSoon).length;
+    document.getElementById('headerCount').textContent = `${playableCount} jeux disponibles`;
+
+    function renderGames() {
+      const term = searchInput.value.trim().toLocaleLowerCase('fr');
+      const category = categorySelect.value;
+      const visible = games.filter(game => {
+        const matchesCategory = category === 'all' || game.category === category;
+        const searchable = `${game.title} ${game.edition} ${game.categoryLabel} ${game.tag}`.toLocaleLowerCase('fr');
+        return matchesCategory && searchable.includes(term);
+      });
+      resultCount.innerHTML = `<strong>${visible.length}</strong> ${visible.length === 1 ? 'jeu affiché' : 'jeux affichés'}`;
+      if (!visible.length) {
+        grid.innerHTML = '<div class="empty-state">Aucun jeu ne correspond à cette recherche.</div>';
+        return;
+      }
+      grid.innerHTML = visible.map((game, index) => {
+        const image = game.image
+          ? `<img src="${game.image}" alt="${game.title}" loading="lazy">`
+          : `<div class="card-placeholder" aria-label="Visuel à ajouter"><span class="placeholder-mark">PS</span><small>VISUEL À AJOUTER</small></div>`;
+        const action = game.comingSoon
+          ? '<span class="soon-button" aria-disabled="true">Bientôt disponible</span>'
+          : `<a class="play-button" href="${game.path}">Jouer <span aria-hidden="true">↗</span></a>`;
+        return `<article class="game-card">
+          <div class="card-image">${image}<span class="card-number">${String(index + 1).padStart(2, '0')}</span><span class="card-category">${game.categoryLabel}</span></div>
+          <div class="card-body">
+            <div class="card-meta"><span class="card-edition">${game.edition}</span>${game.comingSoon ? '<span class="soon-label">À venir</span>' : ''}</div>
+            <h3 class="card-title">${game.title}</h3>
+            <p class="card-desc">${game.description}</p>
+            ${action}
+          </div>
+        </article>`;
+      }).join('');
+    }
+    searchInput.addEventListener('input', renderGames);
+    categorySelect.addEventListener('change', renderGames);
+    renderGames();
+  </script>
+</body>
+</html>
